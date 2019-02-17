@@ -113,8 +113,25 @@ def shelf_crop_directory(dir):
     for image_path in filenames:
         shelf_crop_file(image_path)
 
+def consolidate_images():
+    try:
+        os.mkdir('./consolidated_images')
+    except OSError:
+        print("consolidated_images directory already exists, skipping")
+    dirlist = os.listdir('./')
+    for item in dirlist:
+        if item.startswith('IMG'):
+            inner_dirlist = os.listdir('./'+item)
+            for inneritem in inner_dirlist:
+                os.rename('./'+item+'/'+inneritem, './consolidated_images/'+inneritem)
+            os.rmdir('./'+item)
+
+
 def main():
     print("hello, this is split_image.py")
+    dir = './shelf_images/'
+    shelf_crop_directory(dir)
+    consolidate_images()
 
 if __name__ == main():
     main()
