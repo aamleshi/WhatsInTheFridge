@@ -126,10 +126,9 @@ def consolidate_images():
                 os.rename('./'+item+'/'+inneritem, './consolidated_images/'+inneritem)
             os.rmdir('./'+item)
 
-
 def main():
     print("hello, this is split_image.py")
-    dir = './shelf_images/'
+    dir = '../FridgeTrain2-28'
     shelf_crop_directory(dir)
     consolidate_images()
 
