@@ -128,7 +128,7 @@ def consolidate_images():
 
 def main():
     print("hello, this is split_image.py")
-    dir = '../FridgeTrain2-28'
+    dir = '../TrainingImages3-5'
     shelf_crop_directory(dir)
     consolidate_images()
 
