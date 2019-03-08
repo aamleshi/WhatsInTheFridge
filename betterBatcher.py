@@ -60,10 +60,13 @@ def _preprocess_and_save(features, labels, folderpath):
         with open(folderpath+"/"+str(i),'wb') as f:
             np.save(f, feature)
 
+
+
 def preprocess_and_save_data(imagePaths, labels, batchSize = 16):
     valid_features, valid_labels, train_features, train_labels = train_validate_split(imagePaths, labels)
     assert(len(valid_features) == len(valid_labels))
     assert(len(train_features) == len(train_labels))
+
     print(len(valid_features))
     n_batches = len(train_features)//batchSize
 
@@ -76,7 +79,7 @@ def preprocess_and_save_data(imagePaths, labels, batchSize = 16):
         batchEnd = batchStart + batchSize
 
         featurePaths = train_features[batchStart:batchEnd]
-        
+
         features = []
         for path in tqdm(featurePaths):
             pic = Image.open(path)
@@ -85,6 +88,7 @@ def preprocess_and_save_data(imagePaths, labels, batchSize = 16):
             tmpFeature = skimage.transform.resize(feature, (224, 224))
             tmpFeature = np.copy(tmpFeature).astype('uint8')        
             features.append(tmpFeature)
+
         labels = train_labels[batchStart:batchEnd]
         _preprocess_and_save(features, labels, batchPath+'preprocess_batch_' + str(batch_i) + '.p')
     
