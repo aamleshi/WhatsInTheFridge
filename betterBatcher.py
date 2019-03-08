@@ -71,7 +71,7 @@ def preprocess_and_save_data(imagePaths, labels, batchSize = 16):
 
     print("N_batches: ", n_batches)
     #for batch_i in tqdm(range(1, n_batches + 1)):
-    for batch_i in tqdm(range(1, 12)):
+    for batch_i in tqdm(range(1, 5)):
         batchStart = (batch_i - 1) * batchSize
         batchEnd = batchStart + batchSize
 
@@ -99,8 +99,8 @@ def preprocess_and_save_data(imagePaths, labels, batchSize = 16):
             tmpFeature = np.copy(tmpFeature).astype('uint8')        
             features.append(tmpFeature)
 
-    _preprocess_and_save(np.array(valid_features), np.array(valid_labels), batchPath+'preprocess_validation.p')
-    _preprocess_and_save(np.array(valid_features), np.array(valid_labels), batchPath+'preprocess_testing.p')
+    _preprocess_and_save(features, valid_labels, batchPath+'preprocess_validation.p')
+    _preprocess_and_save(features, valid_labels, batchPath+'preprocess_testing.p')
     return n_batches
 
 def main():
