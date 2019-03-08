@@ -73,8 +73,8 @@ def preprocess_and_save_data(imagePaths, labels, batchSize = 16):
     batchPath = "batchedData/"
 
     print("N_batches: ", n_batches)
-    #for batch_i in tqdm(range(1, n_batches + 1)):
-    for batch_i in tqdm(range(1, 5)):
+    for batch_i in tqdm(range(1, n_batches + 1)):
+    #for batch_i in tqdm(range(1, 5)):
         batchStart = (batch_i - 1) * batchSize
         batchEnd = batchStart + batchSize
 
