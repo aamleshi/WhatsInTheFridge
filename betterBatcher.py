@@ -27,18 +27,21 @@ def aggregateFiles(classList, imgDir, shuffle= True):
         allImagePaths, allImageLabel = zip(*c)
     return allImagePaths, allImageLabel
 
-def train_validate_split(allImagePaths, allImageLabel, validfrac = .1):
+def train_validate_split(allImagePaths, allImageLabel, validfrac = .15, batchSize = 32):
     valid_features = []
     valid_labels = []
     train_features = []
     train_labels = []
     assert(len(allImageLabel) == len(allImagePaths))
     validIdx = int(np.ceil(len(allImagePaths)*validfrac))
-    valid_features = allImagePaths[:validIdx]
-    valid_labels = allImageLabel[:validIdx]
-    train_features = allImagePaths[validIdx:]
-    train_labels = allImageLabel[validIdx:]
-    return (valid_features, valid_labels, train_features, train_labels)
+    overflow = validIdx%batchSize
+    valid_features = allImagePaths[:validIdx-overflow]
+    valid_labels = allImageLabel[:validIdx-overflow]
+    test_features = allImagePaths[validIdx:validIdx*2-overflow]
+    test_labels = allImageLabel[validIdx:validIdx*2-overflow]
+    train_features = allImagePaths[validIdx*2:]
+    train_labels = allImageLabel[validIdx*2:]
+    return (valid_features, valid_labels, test_features, test_labels, train_features, train_labels)
 
 def one_hot_encode(x):
     classes = ["Can", "Cookies", "Eggs", "Empty", "Fruit"]
@@ -62,9 +65,10 @@ def _preprocess_and_save(features, labels, folderpath):
 
 
 
-def preprocess_and_save_data(imagePaths, labels, batchSize = 16):
-    valid_features, valid_labels, train_features, train_labels = train_validate_split(imagePaths, labels)
+def preprocess_and_save_data(imagePaths, labels, batchSize = 32):
+    valid_features, valid_labels, test_features, test_labels, train_features, train_labels = train_validate_split(imagePaths, labels)
     assert(len(valid_features) == len(valid_labels))
+    assert(len(test_features) == len(test_labels)) 
     assert(len(train_features) == len(train_labels))
 
     print(len(valid_features))
@@ -92,7 +96,7 @@ def preprocess_and_save_data(imagePaths, labels, batchSize = 16):
         labels = train_labels[batchStart:batchEnd]
         _preprocess_and_save(features, labels, batchPath+'preprocess_batch_' + str(batch_i) + '.p')
     
-    print("saving validation")
+    print("saving validation dataset")
 
     features = []
     for path in tqdm(valid_features):
@@ -104,7 +108,17 @@ def preprocess_and_save_data(imagePaths, labels, batchSize = 16):
             features.append(tmpFeature)
 
     _preprocess_and_save(features, valid_labels, batchPath+'preprocess_validation.p')
-    _preprocess_and_save(features, valid_labels, batchPath+'preprocess_testing.p')
+
+    print("saving testing dataset")
+    features = []
+    for path in tqdm(test_features):
+            pic = Image.open(path)
+            pix = np.array(pic.getdata()).reshape(pic.size[1], pic.size[0], 3)
+            feature = np.copy(pix).astype('float')
+            tmpFeature = skimage.transform.resize(feature, (224, 224))
+            tmpFeature = np.copy(tmpFeature).astype('uint8')        
+            features.append(tmpFeature)
+    _preprocess_and_save(features, test_labels, batchPath+'preprocess_testing.p')
     return n_batches
 
 def main():
