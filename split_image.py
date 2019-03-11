@@ -127,10 +127,14 @@ def consolidate_images():
             os.rmdir('./'+item)
 
 def main():
+    pass
+    # print("hello, this is split_image.py")
+    # dir = '../TrainingImages3-5'
+    # shelf_crop_directory(dir)
+    # consolidate_images()
+
+if __name__ == main():
     print("hello, this is split_image.py")
     dir = '../TrainingImages3-5'
     shelf_crop_directory(dir)
     consolidate_images()
-
-if __name__ == main():
-    main()
