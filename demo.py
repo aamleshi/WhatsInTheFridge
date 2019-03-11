@@ -25,16 +25,26 @@ def count_items(class_list):
 
     return classes
 
+def print_fridge_contents(classes):
+    print("Your fridge contains:")
+    for key, val in classes.items():
+        if key == "Empty" and val == 4:
+            print(pyfiglet.figlet_format("Nothing"))
+        elif key != "Empty" and val > 0:
+            print(pyfiglet.figlet_format(key + "  :  " + str(val)))
+
+    print(pyfiglet.figlet_format("Enjoy!", font="utopia"))
+
 def demo(image_path):
     """
     takes in single image
     """
-    # orig_img = Image.open(image_path)
-    # orig_img_name = give_img_name(image_path)
-    # items_img = initial_shelf_crop(orig_img)
-    #
-    # # list of absolute filepaths to each sub image
-    # img_files = split_image(2, 2, items_img, orig_img_name)
+    orig_img = Image.open(image_path)
+    orig_img_name = give_img_name(image_path)
+    items_img = initial_shelf_crop(orig_img)
+
+    # list of absolute filepaths to each sub image
+    img_files = split_image(2, 2, items_img, orig_img_name)
 
     #insert ML
 
@@ -46,15 +56,7 @@ def demo(image_path):
     sub_imgs = [sub_img_A, sub_img_B, sub_img_C, sub_img_D]
 
     classes = count_items(sub_imgs)
-
-    print("Your fridge contains:")
-    for key, val in classes.items():
-        if key == "Empty" and val == 4:
-            print(pyfiglet.figlet_format("Nothing"))
-        elif key != "Empty" and val > 0:
-            print(pyfiglet.figlet_format(key + "  :  " + str(val)))
-
-    print(pyfiglet.figlet_format("Enjoy!", font="utopia"))
+    print_fridge_contents(classes)
 
 def main():
     demo("./TrainingImages3-5/IMG_20190305_235230.jpg")
