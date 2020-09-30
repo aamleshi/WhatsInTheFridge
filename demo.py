@@ -11,6 +11,7 @@ from tqdm import tqdm
 import skimage.io
 import skimage.transform
 import tensorflow as tf
+import argparse
 
 
 def count_items(class_list):
@@ -114,7 +115,10 @@ def run_ml(imageFiles):
 
 
 def main():
-    demo("./TrainingImages3-5/IMG_20190306_000226.jpg")
-
+    #demo("./TrainingImages3-5/IMG_20190306_000226.jpg")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("echo")
+    args = parser.parse_args()
+    demo(args.echo)
 if __name__ == main():
     main()
